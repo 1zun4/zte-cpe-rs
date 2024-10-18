@@ -7,11 +7,17 @@
 - GigaCube ZTE MF289F
 
 ## Features
-- 📡 Connect and Disconnect LTE network
-- 🔄 Reboot
+- 🔄 Device Reboot
 - 📊 Device Status Information / Monitoring
+- 📡 Connect and Disconnect Network
+- 🔀 Set Connection Mode
+- 🛡️ Set Bearer Preference
 - 🔒 Set LTE Band Lock
 - 🌐 Set DNS mode configuration
+- 📶 Set WiFi Coverage
+- 🔌 Configure UPnP
+- 🌐 Configure DMZ
+- ♻️ Manage Auto Update
 
 More features coming soon...
 
