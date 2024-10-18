@@ -75,7 +75,6 @@ impl ZteClient {
     // {"wa_inner_version":"BD_VDFDEMF289FV1.0.0B08 [Jun 18 2022 05:39:38]"}
     pub async fn get_version(&self) -> Result<(String, String)> {
         let response = self.get_command("cr_version,wa_inner_version").await?;
-        info!("Response: {}", response);
         
         // cr_version, wa_inner_version
         let cr_version = response.get("cr_version")
@@ -173,10 +172,7 @@ impl ZteClient {
 
         match self.send_command(command).await?.as_str() {
             "success" => Ok(()),
-            v => {
-                println!("Response: {}", v);
-                bail!("Failed to select LTE band")
-            },
+            _ => bail!("Failed to select LTE band"),
         }
     }
 
