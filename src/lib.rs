@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use anyhow::{anyhow, bail, Context, Result};
 use bands::{select_lte_band, LteBand};
 use commands::{AdCommand, BearerPreference, BearerPreferenceCommand, ConnectNetworkCommand, ConnectionMode, ConnectionModeCommand, DisconnectNetworkCommand, DnsModeCommand, GoformCommand, LockLteBandCommand, LoginCommand, LogoutCommand, RebootCommand, UpnpCommand};
-use log::{debug, info};
+use log::debug;
 use reqwest::header::{CONTENT_TYPE, REFERER};
 use serde::Serialize;
 use serde_json::Value;
