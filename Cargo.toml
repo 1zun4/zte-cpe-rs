@@ -6,6 +6,9 @@ version = "0.1.0"
 edition = "2021"
 license = "GPL-3.0"
 license-file = "LICENSE"
+repository = "https://github.com/1zun4/zte-cpe-rs/"
+categories = ["api-bindings"]
+keywords = ["router", "zte", "api", "mf289f"]
 
 [dependencies]
 log = "0.4"
