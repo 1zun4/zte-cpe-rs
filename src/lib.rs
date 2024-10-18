@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use anyhow::{anyhow, bail, Context, Result};
 use bands::{select_lte_band, LteBand};
-use commands::{AdCommand, ConnectNetworkCommand, DisconnectNetworkCommand, DnsModeCommand, GoformCommand, LockLteBandCommand, LoginCommand, LogoutCommand, RebootCommand};
+use commands::{AdCommand, BearerPreference, BearerPreferenceCommand, ConnectNetworkCommand, ConnectionMode, ConnectionModeCommand, DisconnectNetworkCommand, DnsModeCommand, GoformCommand, LockLteBandCommand, LoginCommand, LogoutCommand, RebootCommand, UpnpCommand};
 use log::{debug, info};
 use reqwest::header::{CONTENT_TYPE, REFERER};
 use serde::Serialize;
@@ -13,6 +13,8 @@ mod tests;
 
 pub mod commands;
 pub mod bands;
+
+pub(crate) mod util;
 
 /// ZTE Client
 /// 
@@ -72,7 +74,7 @@ impl ZteClient {
     // http://giga.cube/goform/goform_get_cmd_process?isTest=false&cmd=wa_inner_version
     // {"wa_inner_version":"BD_VDFDEMF289FV1.0.0B08 [Jun 18 2022 05:39:38]"}
     pub async fn get_version(&self) -> Result<(String, String)> {
-        let response = self.get_cmd_process("cr_version,wa_inner_version").await?;
+        let response = self.get_command("cr_version,wa_inner_version").await?;
         info!("Response: {}", response);
         
         // cr_version, wa_inner_version
@@ -110,6 +112,52 @@ impl ZteClient {
         }
     }
 
+    pub async fn set_connection_mode(&self, connection_mode: ConnectionMode, roam: bool) -> Result<()> {
+        let command = ConnectionModeCommand {
+            connection_mode,
+            roam_setting_option: roam,
+        };
+
+        match self.send_command(command).await?.as_str() {
+            "success" => Ok(()),
+            _ => bail!("Failed to set connection mode"),
+        }
+    }
+
+    pub async fn set_network_bearer_preference(&self, bearer_preference: BearerPreference) -> Result<()> {
+        let command = BearerPreferenceCommand {
+            bearer_preference,
+        };
+
+        match self.send_command(command).await?.as_str() {
+            "success" => Ok(()),
+            _ => bail!("Failed to set network bearer preference"),
+        }
+    }
+
+    pub async fn set_upnp(&self, enabled: bool) -> Result<()> {
+        let command = UpnpCommand {
+            upnp_setting_option: enabled,
+        };
+
+        match self.send_command(command).await?.as_str() {
+            "success" => Ok(()),
+            _ => bail!("Failed to set UPnP"),
+        }
+    }
+
+    pub async fn set_dmz(&self, ip_address: Option<String>) -> Result<()> {
+        let command = commands::DmzCommand {
+            dmz_enabled: ip_address.is_some(),
+            dmz_ip_address: ip_address,
+        };
+
+        match self.send_command(command).await?.as_str() {
+            "success" => Ok(()),
+            _ => bail!("Failed to set DMZ"),
+        }
+    }
+    
     // Lock LTE band
     // Inspired by https://miononno.it/files/zte-v3.0b.min.txt
     pub async fn select_lte_band(&self, lte_band: Option<HashSet<LteBand>>) -> Result<()> {
@@ -160,14 +208,14 @@ impl ZteClient {
     // gets a list of pre-defined useful information
     pub async fn get_status(&self) -> Result<Value> {
         const COMMAND_SET: &str = "dns_mode,prefer_dns_manual,standby_dns_manual,network_type,mcc,mnc,rssi,rsrq,lte_rsrp,wan_lte_ca,lte_ca_pcell_band,lte_ca_pcell_bandwidth,lte_ca_scell_band,lte_ca_scell_bandwidth,lte_ca_pcell_arfcn,lte_ca_scell_arfcn,Z_SINR,Z_CELL_ID,Z_eNB_id,Z_rsrq,lte_ca_scell_info,wan_ipaddr,ipv6_wan_ipaddr,static_wan_ipaddr,opms_wan_mode,opms_wan_auto_mode,ppp_status,loginfo";
-        let response = self.get_cmd_process(COMMAND_SET).await?;
+        let response = self.get_command(COMMAND_SET).await?;
 
         Ok(response)
     }
 
     // isTest=false&cmd=LD
     async fn get_ld(&self) -> Result<String> {
-        self.get_cmd_process("LD").await
+        self.get_command("LD").await
             .context("Failed to fetch LD")
             .map(|response| response.get("LD")
                 .and_then(|v| v.as_str())
@@ -178,7 +226,7 @@ impl ZteClient {
 
     // isTest=false&cmd=RD
     async fn get_rd(&self) -> Result<String> {
-        self.get_cmd_process("RD").await
+        self.get_command("RD").await
             .context("Failed to fetch RD")
             .map(|response| response.get("RD")
                 .and_then(|v| v.as_str())
@@ -245,7 +293,7 @@ impl ZteClient {
     
     // Get data from command or multiple commands
     // TODO: Use a struct containing ALL commands to fetch and their data type
-    async fn get_cmd_process(&self, cmd: &str) -> Result<Value> {
+    pub async fn get_command(&self, cmd: &str) -> Result<Value> {
         let multi_data = cmd.contains(",");
         let url = format!("{}goform/goform_get_cmd_process?isTest=false&cmd={}{}", self.referer, cmd, if multi_data { "&multi_data=1" } else { "" });
 

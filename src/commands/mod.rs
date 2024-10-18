@@ -2,6 +2,10 @@ pub mod auth;
 pub mod device;
 pub mod network;
 pub mod dhcp;
+pub mod wifi;
+pub mod dmz;
+pub mod upnp;
+pub mod update;
 
 use serde::Serialize;
 pub use {
@@ -9,6 +13,10 @@ pub use {
     device::*,
     network::*,
     dhcp::*,
+    wifi::*,
+    dmz::*,
+    upnp::*,
+    update::*,
 };
 
 #[derive(Serialize)]
