@@ -27,7 +27,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-zte-cpe-rs = "0.1.0"
+zte-cpe-rs = "0.2.0"
 ```
 
 ## Usage
