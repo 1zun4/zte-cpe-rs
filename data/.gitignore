@@ -1,0 +1,3 @@
+# Exclude HAR files as they might include personal information
+# and should be created by the current developer or only shared privately
+*.har
