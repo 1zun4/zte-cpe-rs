@@ -2,7 +2,7 @@
 name = "zte-cpe-rs"
 description = "Control ZTE MF289F LTE CPE using Rust"
 authors = ["1zuna <marco@ccbluex.net>"]
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 license = "GPL-3.0"
 repository = "https://github.com/1zun4/zte-cpe-rs/"
