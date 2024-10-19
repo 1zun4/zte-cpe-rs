@@ -25,7 +25,7 @@ pub(crate) mod util;
 /// Tested for ZTE MF289F Gigacube
 ///
 pub struct ZteClient {
-    referer: String,
+    target: String,
     client: reqwest::Client,
 }
 
@@ -33,12 +33,12 @@ impl ZteClient {
     pub fn new(ip: &str) -> Result<Self> {
         let client = reqwest::ClientBuilder::new().cookie_store(true).build()?;
 
-        #[cfg(any(feature = "ssl-native", feature = "ssl-rustls"))]
-        let referer = format!("https://{}/", ip);
-        #[cfg(not(any(feature = "ssl-native", feature = "ssl-rustls")))]
-        let referer = format!("http://{}/", ip);
+        #[cfg(any(feature = "tls-native", feature = "tls-rustls"))]
+        let target = format!("https://{}/", ip);
+        #[cfg(not(any(feature = "tls-native", feature = "tls-rustls")))]
+        let target = format!("http://{}/", ip);
 
-        Ok(ZteClient { referer, client })
+        Ok(ZteClient { target, client })
     }
 
     pub async fn login(&mut self, password: String) -> Result<()> {
@@ -294,11 +294,11 @@ impl ZteClient {
         let form_data = serde_urlencoded::to_string(&wrapped_command)
             .context(format!("Failed to serialize command: {}", goform_id))?;
 
-        let url = format!("{}goform/goform_set_cmd_process", self.referer);
+        let url = format!("{}goform/goform_set_cmd_process", self.target);
         let request = self
             .client
             .post(&url)
-            .header(REFERER, &self.referer)
+            .header(REFERER, &self.target)
             .header(
                 CONTENT_TYPE,
                 "application/x-www-form-urlencoded; charset=UTF-8",
@@ -327,7 +327,7 @@ impl ZteClient {
         let multi_data = cmd.contains(",");
         let url = format!(
             "{}goform/goform_get_cmd_process?isTest=false&cmd={}{}",
-            self.referer,
+            self.target,
             cmd,
             if multi_data { "&multi_data=1" } else { "" }
         );
@@ -335,7 +335,7 @@ impl ZteClient {
         let response = self
             .client
             .get(&url)
-            .header(REFERER, &self.referer)
+            .header(REFERER, &self.target)
             .send()
             .await
             .context(format!("Failed to fetch command {}", cmd))?
