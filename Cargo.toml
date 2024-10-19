@@ -26,5 +26,5 @@ tokio = { version = "1", features = ["full"] }
 default = [ ]
 
 # SSL support with native-tls or rustls
-ssl-native = ["reqwest/native-tls"]
-ssl-rustls = ["reqwest/rustls-tls"]
+tls-native = ["reqwest/native-tls"]
+tls-rustls = ["reqwest/rustls-tls"]
