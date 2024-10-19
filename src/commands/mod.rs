@@ -1,23 +1,14 @@
 pub mod auth;
 pub mod device;
-pub mod network;
 pub mod dhcp;
-pub mod wifi;
 pub mod dmz;
-pub mod upnp;
+pub mod network;
 pub mod update;
+pub mod upnp;
+pub mod wifi;
 
 use serde::Serialize;
-pub use {
-    auth::*,
-    device::*,
-    network::*,
-    dhcp::*,
-    wifi::*,
-    dmz::*,
-    upnp::*,
-    update::*,
-};
+pub use {auth::*, device::*, dhcp::*, dmz::*, network::*, update::*, upnp::*, wifi::*};
 
 #[derive(Serialize)]
 pub struct AdCommand<T> {
@@ -47,5 +38,7 @@ where
 
 pub trait GoformCommand {
     fn goform_id(&self) -> &'static str;
-    fn authenticated(&self) -> bool { false }
+    fn authenticated(&self) -> bool {
+        false
+    }
 }

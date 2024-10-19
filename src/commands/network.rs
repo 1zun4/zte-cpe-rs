@@ -1,28 +1,27 @@
-use serde::Serialize;
 use super::GoformCommand;
-
+use serde::Serialize;
 
 #[derive(Serialize, Default)]
-pub struct DisconnectNetworkCommand { }
+pub struct DisconnectNetworkCommand;
 
 impl GoformCommand for DisconnectNetworkCommand {
     fn goform_id(&self) -> &'static str {
         "DISCONNECT_NETWORK"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }
 }
 
 #[derive(Serialize, Default)]
-pub struct ConnectNetworkCommand { }
+pub struct ConnectNetworkCommand;
 
 impl GoformCommand for ConnectNetworkCommand {
     fn goform_id(&self) -> &'static str {
         "CONNECT_NETWORK"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }
@@ -50,14 +49,14 @@ pub struct ConnectionModeCommand {
     pub connection_mode: ConnectionMode,
     #[serde(rename = "roam_setting_option")]
     #[serde(serialize_with = "crate::util::bool_to_str")]
-    pub roam_setting_option: bool
+    pub roam_setting_option: bool,
 }
 
 impl GoformCommand for ConnectionModeCommand {
     fn goform_id(&self) -> &'static str {
         "SET_CONNECTION_MODE"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }
@@ -88,14 +87,14 @@ impl Default for BearerPreference {
 #[derive(Serialize, Default)]
 pub struct BearerPreferenceCommand {
     #[serde(rename = "BearerPreference")]
-    pub bearer_preference: BearerPreference
+    pub bearer_preference: BearerPreference,
 }
 
 impl GoformCommand for BearerPreferenceCommand {
     fn goform_id(&self) -> &'static str {
         "SET_BEARER_PREFERENCE"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }
@@ -111,7 +110,7 @@ impl GoformCommand for LockLteBandCommand {
     fn goform_id(&self) -> &'static str {
         "SET_LTE_BAND_LOCK"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }

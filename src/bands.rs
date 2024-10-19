@@ -1,12 +1,11 @@
 use std::collections::HashSet;
 
-
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum LteBand {
     /// Band 1: 2100 MHz (IMT)
     Band1 = 1, // lte_band_lock: 0x1
     /// Band 3: 1800 MHz (DCS)
-    Band3 = 3, // 
+    Band3 = 3, //
     /// Band 7: 2600 MHz (IMT-E)
     Band7 = 7,
     /// Band 8: 900 MHz (Extended GSM)
@@ -22,7 +21,7 @@ pub enum LteBand {
 }
 
 // Predefined bitmask representing all supported LTE bands
-pub const ALL_LTE_BANDS: &str = "0x20080800C5";  
+pub const ALL_LTE_BANDS: &str = "0x20080800C5";
 
 // Convert the selected bands to a hexadecimal bitmask
 fn calculate_bitmask(selected_bands: HashSet<LteBand>) -> String {

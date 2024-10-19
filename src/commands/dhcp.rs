@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::GoformCommand;
+use serde::Serialize;
 
 #[derive(Serialize, Default)]
 pub struct DnsModeCommand {
@@ -15,7 +15,7 @@ impl GoformCommand for DnsModeCommand {
     fn goform_id(&self) -> &'static str {
         "ROUTER_DNS_SETTING"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }

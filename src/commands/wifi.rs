@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::GoformCommand;
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub enum WiFiCoverage {
@@ -20,14 +20,14 @@ impl Default for WiFiCoverage {
 #[derive(Serialize, Default)]
 pub struct WiFiCoverageCommand {
     #[serde(rename = "WiFiCoverage")]
-    pub wifi_coverage: WiFiCoverage
+    pub wifi_coverage: WiFiCoverage,
 }
 
 impl GoformCommand for WiFiCoverageCommand {
     fn goform_id(&self) -> &'static str {
         "setWiFiCoverage"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }

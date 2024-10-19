@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::GoformCommand;
+use serde::Serialize;
 
 #[derive(Serialize, Default)]
 pub struct LoginCommand {
@@ -15,13 +15,13 @@ impl GoformCommand for LoginCommand {
 }
 
 #[derive(Serialize, Default)]
-pub struct LogoutCommand { }
+pub struct LogoutCommand;
 
 impl GoformCommand for LogoutCommand {
     fn goform_id(&self) -> &'static str {
         "LOGOUT"
     }
-    
+
     fn authenticated(&self) -> bool {
         true
     }
