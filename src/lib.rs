@@ -219,7 +219,7 @@ impl ZteClient {
 
     // gets a list of pre-defined useful information
     pub async fn get_status(&self) -> Result<Value> {
-        const COMMAND_SET: &str = "dns_mode,prefer_dns_manual,standby_dns_manual,network_type,mcc,mnc,rssi,rsrq,lte_rsrp,wan_lte_ca,lte_ca_pcell_band,lte_ca_pcell_bandwidth,lte_ca_scell_band,lte_ca_scell_bandwidth,lte_ca_pcell_arfcn,lte_ca_scell_arfcn,Z_SINR,Z_CELL_ID,Z_eNB_id,Z_rsrq,lte_ca_scell_info,wan_ipaddr,ipv6_wan_ipaddr,static_wan_ipaddr,opms_wan_mode,opms_wan_auto_mode,ppp_status,loginfo";
+        const COMMAND_SET: &str = "imei,imsi,dns_mode,prefer_dns_manual,standby_dns_manual,network_type,network_provider,mcc,mnc,rssi,rsrq,lte_rsrp,wan_lte_ca,lte_ca_pcell_band,lte_ca_pcell_bandwidth,lte_ca_scell_band,lte_ca_scell_bandwidth,lte_ca_pcell_arfcn,lte_ca_scell_arfcn,Z_SINR,Z_CELL_ID,Z_eNB_id,Z_rsrq,lte_ca_scell_info,wan_ipaddr,ipv6_wan_ipaddr,static_wan_ipaddr,opms_wan_mode,opms_wan_auto_mode,ppp_status,loginfo";
         let response = self.get_command(COMMAND_SET).await?;
 
         Ok(response)
