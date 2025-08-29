@@ -1,25 +1,23 @@
 # zte-cpe-rs
 
-🚀 A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F.
+A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F.
 
-## Supported Devices
+## Tested Devices
 
 - GigaCube ZTE MF289F
 
 ## Features
-- 🔄 Device Reboot
-- 📊 Device Status Information / Monitoring
-- 📡 Connect and Disconnect Network
-- 🔀 Set Connection Mode
-- 🛡️ Set Bearer Preference
-- 🔒 Set LTE Band Lock
-- 🌐 Set DNS mode configuration
-- 📶 Set WiFi Coverage
-- 🔌 Configure UPnP
-- 🌐 Configure DMZ
-- ♻️ Manage Auto Update
-
-More features coming soon...
+- Device Reboot
+- Device Status Information / Monitoring
+- Connect and Disconnect Network
+- Set Connection Mode
+- Set Bearer Preference
+- Set LTE Band Lock
+- Set DNS mode configuration
+- Set WiFi Coverage
+- Configure UPnP
+- Configure DMZ
+- Manage Auto Update
 
 ## Installation
 
@@ -27,7 +25,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-zte-cpe-rs = "0.2.0"
+zte-cpe-rs = "0.2.1"
 ```
 
 ## Usage
