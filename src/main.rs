@@ -4,8 +4,8 @@ use clap::{error::ErrorKind, Parser};
 
 mod cli;
 
-#[cfg(not(any(feature = "mf289f", feature = "gt5s")))]
-compile_error!("the CLI requires at least one router model feature: mf289f or gt5s");
+#[cfg(not(any(feature = "mf289f", feature = "g5ts")))]
+compile_error!("the CLI requires at least one router model feature: mf289f or g5ts");
 
 #[tokio::main]
 async fn main() -> ExitCode {

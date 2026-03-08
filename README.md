@@ -1,14 +1,14 @@
 # zte-cpe-rs
 
-A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F and ZTE GT5S.
+A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F and ZTE G5TS.
 
 ## Supported Devices
 
-- ZTE GT5S
+- ZTE G5TS
 - GigaCube ZTE MF289F (Last tested: https://github.com/1zun4/zte-cpe-rs/commit/bdd76f850785e76be45a149a8e7d72c7eb99da11)
 
 ## Features
-| Feature | MF289F | GT5S |
+| Feature | MF289F | G5TS |
 | --- | --- | --- |
 | Device reboot | Yes | Yes |
 | Get status info | Yes | Yes |
@@ -56,7 +56,7 @@ use zte_cpe_rs::{bands::LteBand, mf289f::Mf289fClient, RouterClient};
 async fn main() -> Result<()> {
     let mut router = Mf289fClient::new("http://giga.cube")
         .context("Failed to create MF289F client")?;
-    // For a GT5S, use `zte_cpe_rs::gt5s::Gt5sClient` instead.
+    // For a G5TS, use `zte_cpe_rs::g5ts::G5tsClient` instead.
     
     // Login
     router.login("YOURPASSWORD")
@@ -100,8 +100,8 @@ cd zte-cpe-rs
 Use the CLI:
 
 ```sh
-cargo run --features cli -- --model gt5s --url https://192.168.0.1 --password YOURPASSWORD status
-cargo run --features cli -- --model gt5s --url https://192.168.0.1 --password YOURPASSWORD status --pretty
+cargo run --features cli -- --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status
+cargo run --features cli -- --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status --pretty
 ```
 
 ## Acknowledgements

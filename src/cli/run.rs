@@ -223,25 +223,25 @@ fn build_client(model: Model, url: &str) -> Result<Box<dyn RouterClient + Send +
     match model {
         #[cfg(feature = "mf289f")]
         Model::Mf289f => Ok(Box::new(zte_cpe_rs::mf289f::Mf289fClient::new(url)?)),
-        #[cfg(feature = "gt5s")]
-        Model::Gt5s => Ok(Box::new(zte_cpe_rs::gt5s::Gt5sClient::new(url)?)),
+        #[cfg(feature = "g5ts")]
+        Model::G5ts => Ok(Box::new(zte_cpe_rs::g5ts::G5tsClient::new(url)?)),
     }
 }
 
 fn default_model() -> Option<Model> {
-    #[cfg(all(feature = "mf289f", not(feature = "gt5s")))]
+    #[cfg(all(feature = "mf289f", not(feature = "g5ts")))]
     {
         return Some(Model::Mf289f);
     }
 
-    #[cfg(all(feature = "gt5s", not(feature = "mf289f")))]
+    #[cfg(all(feature = "g5ts", not(feature = "mf289f")))]
     {
-        return Some(Model::Gt5s);
+        return Some(Model::G5ts);
     }
 
     #[cfg(any(
-        all(feature = "mf289f", feature = "gt5s"),
-        not(any(feature = "mf289f", feature = "gt5s"))
+        all(feature = "mf289f", feature = "g5ts"),
+        not(any(feature = "mf289f", feature = "g5ts"))
     ))]
     {
         None

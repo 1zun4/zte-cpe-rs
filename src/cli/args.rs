@@ -11,8 +11,8 @@ use zte_cpe_rs::{BearerPreference, ConnectionMode};
 pub enum Model {
     #[cfg(feature = "mf289f")]
     Mf289f,
-    #[cfg(feature = "gt5s")]
-    Gt5s,
+    #[cfg(feature = "g5ts")]
+    G5ts,
 }
 
 impl Display for Model {
@@ -20,8 +20,8 @@ impl Display for Model {
         match self {
             #[cfg(feature = "mf289f")]
             Self::Mf289f => f.write_str("mf289f"),
-            #[cfg(feature = "gt5s")]
-            Self::Gt5s => f.write_str("gt5s"),
+            #[cfg(feature = "g5ts")]
+            Self::G5ts => f.write_str("g5ts"),
         }
     }
 }

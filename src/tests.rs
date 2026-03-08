@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 use crate::bands::{select_lte_band, LteBand, ALL_LTE_BANDS};
-use crate::gt5s::gt5s_password_hash;
+use crate::g5ts::g5ts_password_hash;
 use crate::{Model, Router};
 
 #[tokio::test]
@@ -61,7 +61,7 @@ async fn test_gt5s_password_hash() {
     let password = "ZTEPASSWORD";
     let salt = "D537DFE05F21D78962E8996209E6ECA2CCCC7BE985DC55FC47F5EC38F460EBA6";
 
-    let hash = gt5s_password_hash(password, salt);
+    let hash = g5ts_password_hash(password, salt);
 
     // SHA256("ZTEPASSWORD") = D2989352E891805206B7DD0072EE7718EF00403FFE563998880E60B082392728
     let expected_inner = "D2989352E891805206B7DD0072EE7718EF00403FFE563998880E60B082392728";
@@ -79,7 +79,7 @@ async fn test_gt5s_password_hash() {
 #[tokio::test]
 async fn test_gt5s_password_hash_uppercase_output() {
     // Verify the hash is always uppercase hex
-    let hash = gt5s_password_hash("test", "ABCDEF");
+    let hash = g5ts_password_hash("test", "ABCDEF");
     assert_eq!(hash, hash.to_uppercase());
     assert_eq!(hash.len(), 64);
 }
@@ -91,46 +91,46 @@ fn test_router_new_mf289f() {
 }
 
 #[test]
-fn test_router_new_gt5s() {
-    let router = Router::new(Model::GT5S, "192.168.0.1");
+fn test_router_new_g5ts() {
+    let router = Router::new(Model::G5TS, "192.168.0.1");
     assert!(router.is_ok());
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_reboot() {
-    let router = Router::new(Model::GT5S, "192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_reboot() {
+    let router = Router::new(Model::G5TS, "192.168.0.1").unwrap();
     let result = router.reboot().await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_set_upnp() {
-    let router = Router::new(Model::GT5S, "192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_set_upnp() {
+    let router = Router::new(Model::G5TS, "192.168.0.1").unwrap();
     let result = router.set_upnp(true).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_set_dmz() {
-    let router = Router::new(Model::GT5S, "192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_set_dmz() {
+    let router = Router::new(Model::G5TS, "192.168.0.1").unwrap();
     let result = router.set_dmz(None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_select_lte_band() {
-    let router = Router::new(Model::GT5S, "192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_select_lte_band() {
+    let router = Router::new(Model::G5TS, "192.168.0.1").unwrap();
     let result = router.select_lte_band(None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_get_status() {
-    let router = Router::new(Model::GT5S, "192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_get_status() {
+    let router = Router::new(Model::G5TS, "192.168.0.1").unwrap();
     let result = router.get_status().await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));

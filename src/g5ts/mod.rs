@@ -1,4 +1,4 @@
-//! ZTE GT5S (G5TS) CPE client
+//! ZTE G5TS CPE client
 //!
 //! Uses ubus JSON-RPC 2.0 over HTTPS, completely different from the MF289F goform API.
 //!
@@ -99,7 +99,7 @@ struct LoginResult {
     timeout: Option<i64>,
 }
 
-/// WAN interface status returned by the GT5S.
+/// WAN interface status returned by the G5TS.
 #[derive(Deserialize)]
 pub struct WwanIfaceStatus {
     pub connect_status: String,
@@ -112,10 +112,10 @@ pub struct WwanIfaceStatus {
     pub ipv4_dns_standby: Option<String>,
 }
 
-/// ZTE GT5S Client
+/// ZTE G5TS Client
 ///
 /// Uses ubus JSON-RPC 2.0 over HTTPS to communicate with the router.
-pub struct Gt5sClient {
+pub struct G5tsClient {
     target: String,
     client: reqwest::Client,
     session: String,
@@ -124,7 +124,7 @@ pub struct Gt5sClient {
     aes_key: Option<[u8; 32]>,
 }
 
-impl Gt5sClient {
+impl G5tsClient {
     pub fn new(url: &str) -> Result<Self> {
         #[allow(unused_mut)]
         let mut builder = reqwest::ClientBuilder::new().cookie_store(true);
@@ -138,7 +138,7 @@ impl Gt5sClient {
         let client = builder.build()?;
         let target = normalize_router_url(url)?;
 
-        Ok(Gt5sClient {
+        Ok(G5tsClient {
             target,
             client,
             session: NULL_SESSION.to_string(),
@@ -184,12 +184,12 @@ impl Gt5sClient {
         }
     }
 
-    /// Set GT5S bearer preference including 5G-specific modes.
+    /// Set G5TS bearer preference including 5G-specific modes.
     pub async fn set_bearer_preference(&self, preference: BearerPreference) -> Result<()> {
         let net_select = gt5s_net_select_value(preference)?;
         self.send_command(&commands::SetNetSelectCommand { net_select })
             .await
-            .context("Failed to set GT5S bearer preference")?;
+            .context("Failed to set G5TS bearer preference")?;
         Ok(())
     }
 
@@ -369,7 +369,7 @@ impl Gt5sClient {
 }
 
 #[async_trait::async_trait]
-impl RouterClient for Gt5sClient {
+impl RouterClient for G5tsClient {
     async fn login(&mut self, password: &str) -> Result<()> {
         let info = self.get_login_info().await?;
 
@@ -377,7 +377,7 @@ impl RouterClient for Gt5sClient {
             bail!("Account is locked due to too many failed login attempts");
         }
 
-        let hash = gt5s_password_hash(password, &info.zte_web_sault);
+        let hash = g5ts_password_hash(password, &info.zte_web_sault);
 
         let resp = self
             .send_command(&commands::LoginCommand { password: hash })
@@ -504,11 +504,11 @@ impl RouterClient for Gt5sClient {
 
     async fn select_lte_band(&self, lte_band: Option<HashSet<LteBand>>) -> Result<()> {
         let _ = lte_band;
-        bail!("select_lte_band is not supported on GT5S")
+        bail!("select_lte_band is not supported on G5TS")
     }
 
     async fn set_dns(&self, _manual: Option<[String; 2]>) -> Result<()> {
-        bail!("set_dns is not directly supported on GT5S (DNS is managed by the connection profile)")
+        bail!("set_dns is not directly supported on G5TS (DNS is managed by the connection profile)")
     }
 
     async fn get_status(&self) -> Result<Value> {
@@ -865,8 +865,8 @@ impl RouterClient for Gt5sClient {
     }
 }
 
-/// Compute the GT5S password hash: `SHA256(SHA256(password).UPPER + salt).UPPER`
-pub fn gt5s_password_hash(password: &str, salt: &str) -> String {
+/// Compute the G5TS password hash: `SHA256(SHA256(password).UPPER + salt).UPPER`
+pub fn g5ts_password_hash(password: &str, salt: &str) -> String {
     let hash1 = sha256::digest(password.as_bytes()).to_uppercase();
     let concat = format!("{}{}", hash1, salt);
     sha256::digest(concat.as_bytes()).to_uppercase()

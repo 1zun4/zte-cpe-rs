@@ -8,7 +8,7 @@ pub mod sms;
 use serde::Serialize;
 pub use {apn::*, auth::*, device::*, network::*, router::*, sms::*};
 
-/// Trait for GT5S ubus JSON-RPC commands.
+/// Trait for G5TS ubus JSON-RPC commands.
 ///
 /// Each command maps to a ubus `call` with `(session, module, method, params)`.
 pub trait UbusCommand: Serialize {

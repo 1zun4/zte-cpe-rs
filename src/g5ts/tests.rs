@@ -1,12 +1,12 @@
-use crate::gt5s::{Gt5sClient, gt5s_password_hash};
+use crate::g5ts::{G5tsClient, g5ts_password_hash};
 use crate::RouterClient;
 
 #[tokio::test]
-async fn test_gt5s_password_hash() {
+async fn test_g5ts_password_hash() {
     let password = "ZTEPASSWORD";
     let salt = "D537DFE05F21D78962E8996209E6ECA2CCCC7BE985DC55FC47F5EC38F460EBA6";
 
-    let hash = gt5s_password_hash(password, salt);
+    let hash = g5ts_password_hash(password, salt);
 
     let expected_inner = "D2989352E891805206B7DD0072EE7718EF00403FFE563998880E60B082392728";
     assert_eq!(
@@ -20,21 +20,21 @@ async fn test_gt5s_password_hash() {
 }
 
 #[tokio::test]
-async fn test_gt5s_password_hash_uppercase_output() {
-    let hash = gt5s_password_hash("test", "ABCDEF");
+async fn test_g5ts_password_hash_uppercase_output() {
+    let hash = g5ts_password_hash("test", "ABCDEF");
     assert_eq!(hash, hash.to_uppercase());
     assert_eq!(hash.len(), 64);
 }
 
 #[test]
-fn test_gt5s_client_new() {
-    let client = Gt5sClient::new("https://192.168.0.1");
+fn test_g5ts_client_new() {
+    let client = G5tsClient::new("https://192.168.0.1");
     assert!(client.is_ok());
 }
 
 #[tokio::test]
-async fn test_gt5s_unsupported_set_dns() {
-    let client = Gt5sClient::new("https://192.168.0.1").unwrap();
+async fn test_g5ts_unsupported_set_dns() {
+    let client = G5tsClient::new("https://192.168.0.1").unwrap();
     let result = client.set_dns(None).await;
     assert!(result.is_err());
     assert!(result
@@ -44,8 +44,8 @@ async fn test_gt5s_unsupported_set_dns() {
 }
 
 #[tokio::test]
-async fn test_gt5s_select_lte_band_not_supported() {
-    let client = Gt5sClient::new("https://192.168.0.1").unwrap();
+async fn test_g5ts_select_lte_band_not_supported() {
+    let client = G5tsClient::new("https://192.168.0.1").unwrap();
     let result = client.select_lte_band(None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));
