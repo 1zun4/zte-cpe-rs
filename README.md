@@ -1,23 +1,24 @@
 # zte-cpe-rs
 
-A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F.
+A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F and ZTE GT5S.
 
-## Tested Devices
+## Supported Devices
 
-- GigaCube ZTE MF289F
+- ZTE GT5S
+- GigaCube ZTE MF289F (Last tested: https://github.com/1zun4/zte-cpe-rs/commit/bdd76f850785e76be45a149a8e7d72c7eb99da11)
 
 ## Features
-- Device Reboot
-- Device Status Information / Monitoring
-- Connect and Disconnect Network
-- Set Connection Mode
-- Set Bearer Preference
-- Set LTE Band Lock
-- Set DNS mode configuration
-- Set WiFi Coverage
-- Configure UPnP
-- Configure DMZ
-- Manage Auto Update
+| Feature | MF289F | GT5S |
+| --- | --- | --- |
+| Device reboot | Yes | Yes |
+| Status information / monitoring | Yes | Yes |
+| Connect and disconnect network | Yes | Yes |
+| Set connection mode | Yes | Yes |
+| Set bearer preference | Yes | Yes |
+| Set LTE band lock | Yes | No |
+| Set DNS mode configuration | Yes | No |
+| Configure UPnP | Yes | Yes |
+| Configure DMZ | Yes | Yes |
 
 ## Installation
 
@@ -28,6 +29,8 @@ Add this to your `Cargo.toml`:
 zte-cpe-rs = "0.2.1"
 ```
 
+The library builds by default. The CLI is optional and is only compiled when you enable the `cli` feature.
+
 ## Usage
 
 Here's a basic example of how to use `zte-cpe-rs`:
@@ -36,71 +39,43 @@ Here's a basic example of how to use `zte-cpe-rs`:
 use std::collections::HashSet;
 
 use anyhow::{Context, Result};
-use zte_cpe_rs::{bands::LteBand, ZteClient};
+use zte_cpe_rs::{bands::LteBand, mf289f::Mf289fClient, RouterClient};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let mut zte_client = ZteClient::new("giga.cube")
-        .context("Failed to create ZteClient")?;
-
+    let mut router = Mf289fClient::new("giga.cube")
+        .context("Failed to create MF289F client")?;
+    // For a GT5S, use `zte_cpe_rs::gt5s::Gt5sClient` instead.
+    
     // Login
-    zte_client.login("YOURPASSWORD".to_string())
+    router.login("YOURPASSWORD")
         .await
         .context("Failed to login")?;
 
     // Disconnect network
-    zte_client.disconnect_network().await?;
+    router.disconnect_network().await?;
 
     // Connect network
-    zte_client.connect_network().await?;
+    router.connect_network().await?;
 
     // Get status
-    println!("{}", zte_client.get_status().await?);
+    println!("{}", router.get_status().await?);
 
     // Set LTE band
     let mut bands = HashSet::new();
     bands.insert(LteBand::Band1);
     bands.insert(LteBand::Band3);
     bands.insert(LteBand::Band7);
-    
-    zte_client.select_lte_band(Some(bands))
+
+    router.select_lte_band(Some(bands))
         .await?;
 
     // Logout
-    zte_client.logout().await?;
+    router.logout().await?;
 
     Ok(())
 }
 ```
-
-## Contributing
-
-We welcome contributions! To get started, follow these steps:
-
-1. **Fork the repository**: Click the "Fork" button at the top right of this page.
-2. **Clone your fork**: 
-    ```sh
-    git clone https://github.com/yourusername/zte-cpe-rs.git
-    cd zte-cpe-rs
-    ```
-3. **Create a new branch**: 
-    ```sh
-    git checkout -b feature/your-feature-name
-    ```
-4. **Make your changes**: Implement your feature or fix the bug.
-5. **Commit your changes**: 
-    ```sh
-    git commit -am 'Add a meaningful commit message'
-    ```
-6. **Push to your branch**: 
-    ```sh
-    git push origin feature/your-feature-name
-    ```
-7. **Open a Pull Request**: Go to the original repository and click the "New Pull Request" button.
-
-Please ensure your code adheres to the project's coding standards and includes appropriate tests.
-
-Thank you for your contributions!
 
 ## Setup
 
@@ -115,6 +90,30 @@ Build the project:
 
 ```sh
 cargo build
+```
+
+Build the CLI for a specific router family:
+
+```sh
+# GT5S over HTTPS with rustls
+cargo build --no-default-features --features cli,gt5s,tls-rustls
+
+# MF289F over HTTP
+cargo build --no-default-features --features cli,mf289f
+```
+
+Use the CLI:
+
+```sh
+# When both model features are compiled in, pass --model.
+cargo run --features cli -- --model gt5s --host 192.168.0.1 --password YOURPASSWORD status
+
+# Pretty-print JSON output.
+cargo run --features cli -- --model gt5s --host 192.168.0.1 --password YOURPASSWORD status --pretty
+
+# Model-specific builds can omit --model when only one family is enabled.
+cargo run --no-default-features --features cli,gt5s,tls-rustls -- \
+    --host 192.168.0.1 --password YOURPASSWORD version
 ```
 
 Run tests:
