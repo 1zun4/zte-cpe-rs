@@ -1,13 +1,13 @@
 [package]
 name = "zte-cpe-rs"
-description = "Control ZTE MF289F LTE CPE using Rust"
+description = "Control ZTE MF289F and GT5S LTE/5G CPE using Rust"
 authors = ["1zuna <marco@ccbluex.net>"]
 version = "0.2.1"
 edition = "2021"
 license = "GPL-3.0"
 repository = "https://github.com/1zun4/zte-cpe-rs/"
 categories = ["api-bindings"]
-keywords = ["router", "zte", "api", "mf289f"]
+keywords = ["router", "zte", "api", "mf289f", "gt5s"]
 
 [dependencies]
 log = "0.4"
@@ -24,10 +24,11 @@ async-trait = "0.1"
 tokio = { version = "1", features = ["full"] }
 
 [features]
-default = ["mf289f"]
+default = ["mf289f", "gt5s"]
 
 # Router model support
 mf289f = []
+gt5s = ["tls-rustls"]
 
 # SSL support with native-tls or rustls
 tls-native = ["reqwest/native-tls"]

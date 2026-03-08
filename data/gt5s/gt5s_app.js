@@ -1,0 +1,2 @@
+define(["config/menu","language","logout","mobileLogout","status/statusBar","router","login","config/config"],function(i,n,t,a,o,e,r,u){function c(){i.init(),n.init(),e.init(),t.init(),a.init(),o.init(),u.HAS_GDPR?($("#privacy_span").show(),$("#privacy_a").show()):($("#privacy_span").hide(),$("#privacy_a").hide()),$("#appHeader").show()}return{init:c}});
+//# sourceMappingURL=../sourcemaps/app.js.map
