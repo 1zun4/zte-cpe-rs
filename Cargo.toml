@@ -18,12 +18,16 @@ sha256 = "1.5.0"
 md5 = "0.7.0"
 anyhow = "1.0"
 serde_urlencoded = "0.7.1"
+async-trait = "0.1"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
 
 [features]
-default = [ ]
+default = ["mf289f"]
+
+# Router model support
+mf289f = []
 
 # SSL support with native-tls or rustls
 tls-native = ["reqwest/native-tls"]

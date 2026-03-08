@@ -1,6 +1,8 @@
 use super::GoformCommand;
 use serde::Serialize;
 
+use crate::{BearerPreference, ConnectionMode};
+
 #[derive(Serialize, Default)]
 pub struct DisconnectNetworkCommand;
 
@@ -24,20 +26,6 @@ impl GoformCommand for ConnectNetworkCommand {
 
     fn authenticated(&self) -> bool {
         true
-    }
-}
-
-#[derive(Serialize)]
-pub enum ConnectionMode {
-    #[serde(rename = "auto_dial")]
-    Auto,
-    #[serde(rename = "manual_dial")]
-    Manual,
-}
-
-impl Default for ConnectionMode {
-    fn default() -> Self {
-        ConnectionMode::Auto
     }
 }
 
@@ -66,24 +54,6 @@ impl GoformCommand for ConnectionModeCommand {
 // isTest=false&goformId=SET_BEARER_PREFERENCE&BearerPreference=Only_LTE&AD=ccf4ff80adf777e9c6ee1ab50216d9d0
 // isTest=false&goformId=SET_BEARER_PREFERENCE&BearerPreference=Only_GSM&AD=945b088500a4bc851a07647ff967d6c9
 // isTest=false&goformId=SET_BEARER_PREFERENCE&BearerPreference=Only_WCDMA&AD=b47f01a5a2e331713cf8497391211246
-#[derive(Serialize)]
-pub enum BearerPreference {
-    #[serde(rename = "NETWORK_auto")]
-    Auto,
-    #[serde(rename = "Only_LTE")]
-    OnlyLte,
-    #[serde(rename = "Only_GSM")]
-    OnlyGsm,
-    #[serde(rename = "Only_WCDMA")]
-    OnlyWcdma,
-}
-
-impl Default for BearerPreference {
-    fn default() -> Self {
-        BearerPreference::Auto
-    }
-}
-
 #[derive(Serialize, Default)]
 pub struct BearerPreferenceCommand {
     #[serde(rename = "BearerPreference")]
