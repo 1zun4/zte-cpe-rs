@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::bands::{select_lte_band, LteBand, ALL_LTE_BANDS};
+use crate::{bands::{ALL_LTE_BANDS, LteBand, select_lte_band}, mf289f::Mf289fClient};
 
 #[tokio::test]
 async fn test_mf289f_login_hash() {
@@ -49,7 +49,7 @@ async fn test_select_lte_band_specific() {
 
 #[test]
 fn test_mf289f_client_new() {
-    let client = crate::mf289f::Mf289fClient::new("192.168.0.1");
+    let client = Mf289fClient::new("http://192.168.0.1");
     assert!(client.is_ok());
 }
 
@@ -57,7 +57,7 @@ fn test_mf289f_client_new() {
 async fn test_mf289f_rejects_5g_bearer_preference() {
     use crate::RouterClient;
 
-    let client = crate::mf289f::Mf289fClient::new("192.168.0.1").unwrap();
+    let client = Mf289fClient::new("http://192.168.0.1").unwrap();
     let result = client
         .set_network_bearer_preference(crate::BearerPreference::OnlyNr5g)
         .await;

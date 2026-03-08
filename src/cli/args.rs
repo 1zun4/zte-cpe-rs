@@ -148,8 +148,8 @@ impl FromStr for LteBandSelection {
 pub struct Cli {
     #[arg(long)]
     pub model: Option<Model>,
-    #[arg(long)]
-    pub host: String,
+    #[arg(long, value_name = "URL")]
+    pub url: String,
     #[arg(long)]
     pub password: String,
     #[command(subcommand)]

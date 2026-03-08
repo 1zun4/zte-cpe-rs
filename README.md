@@ -43,7 +43,7 @@ use zte_cpe_rs::{bands::LteBand, mf289f::Mf289fClient, RouterClient};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let mut router = Mf289fClient::new("giga.cube")
+    let mut router = Mf289fClient::new("http://giga.cube")
         .context("Failed to create MF289F client")?;
     // For a GT5S, use `zte_cpe_rs::gt5s::Gt5sClient` instead.
     
@@ -86,40 +86,11 @@ git clone https://github.com/1zun4/zte-cpe-rs.git
 cd zte-cpe-rs
 ```
 
-Build the project:
-
-```sh
-cargo build
-```
-
-Build the CLI for a specific router family:
-
-```sh
-# GT5S over HTTPS with rustls
-cargo build --no-default-features --features cli,gt5s,tls-rustls
-
-# MF289F over HTTP
-cargo build --no-default-features --features cli,mf289f
-```
-
 Use the CLI:
 
 ```sh
-# When both model features are compiled in, pass --model.
-cargo run --features cli -- --model gt5s --host 192.168.0.1 --password YOURPASSWORD status
-
-# Pretty-print JSON output.
-cargo run --features cli -- --model gt5s --host 192.168.0.1 --password YOURPASSWORD status --pretty
-
-# Model-specific builds can omit --model when only one family is enabled.
-cargo run --no-default-features --features cli,gt5s,tls-rustls -- \
-    --host 192.168.0.1 --password YOURPASSWORD version
-```
-
-Run tests:
-
-```sh
-cargo test
+cargo run --features cli -- --model gt5s --url https://192.168.0.1 --password YOURPASSWORD status
+cargo run --features cli -- --model gt5s --url https://192.168.0.1 --password YOURPASSWORD status --pretty
 ```
 
 ## Acknowledgements

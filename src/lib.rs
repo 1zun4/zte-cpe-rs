@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use anyhow::Result;
+use anyhow::{Context, Result, bail};
 use bands::LteBand;
 use serde_json::Value;
 
@@ -13,6 +13,26 @@ pub mod gt5s;
 
 #[cfg(feature = "mf289f")]
 pub mod mf289f;
+
+pub(crate) fn normalize_router_url(url: &str) -> Result<String> {
+    let mut target = reqwest::Url::parse(url)
+        .with_context(|| format!("Invalid router URL: {url}"))?;
+
+    if target.cannot_be_a_base() {
+        bail!("Router URL must be an absolute base URL: {url}");
+    }
+
+    if target.query().is_some() || target.fragment().is_some() {
+        bail!("Router URL must not include a query string or fragment: {url}");
+    }
+
+    if !target.path().ends_with('/') {
+        let normalized_path = format!("{}/", target.path().trim_end_matches('/'));
+        target.set_path(&normalized_path);
+    }
+
+    Ok(target.into())
+}
 
 #[derive(serde::Serialize, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ConnectionMode {
@@ -66,9 +86,9 @@ impl Default for BearerPreference {
 ///
 /// // Use the concrete type for the router you have:
 /// #[cfg(feature = "gt5s")]
-/// let mut router = zte_cpe_rs::gt5s::Gt5sClient::new("192.168.0.1")?;
+/// let mut router = zte_cpe_rs::gt5s::Gt5sClient::new("https://192.168.0.1")?;
 /// #[cfg(feature = "mf289f")]
-/// let mut router = zte_cpe_rs::mf289f::Mf289fClient::new("192.168.0.1")?;
+/// let mut router = zte_cpe_rs::mf289f::Mf289fClient::new("http://192.168.0.1")?;
 ///
 /// router.login("password").await?;
 /// router.disconnect_network().await?;

@@ -31,12 +31,12 @@ clap = { version = "4.5", features = ["derive"], optional = true }
 tokio = { version = "1", features = ["full"] }
 
 [features]
-default = ["mf289f", "gt5s"]
+default = ["tls-rustls", "mf289f", "gt5s"]
 cli = ["dep:clap", "dep:tokio"]
 
 # Router model support
 mf289f = []
-gt5s = ["tls-rustls"]
+gt5s = []
 
 # SSL support with native-tls or rustls
 tls-native = ["reqwest/native-tls"]

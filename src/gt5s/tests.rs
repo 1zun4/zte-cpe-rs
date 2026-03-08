@@ -1,4 +1,4 @@
-use crate::gt5s::gt5s_password_hash;
+use crate::gt5s::{Gt5sClient, gt5s_password_hash};
 use crate::RouterClient;
 
 #[tokio::test]
@@ -28,13 +28,13 @@ async fn test_gt5s_password_hash_uppercase_output() {
 
 #[test]
 fn test_gt5s_client_new() {
-    let client = crate::gt5s::Gt5sClient::new("192.168.0.1");
+    let client = Gt5sClient::new("https://192.168.0.1");
     assert!(client.is_ok());
 }
 
 #[tokio::test]
 async fn test_gt5s_unsupported_set_dns() {
-    let client = crate::gt5s::Gt5sClient::new("192.168.0.1").unwrap();
+    let client = Gt5sClient::new("https://192.168.0.1").unwrap();
     let result = client.set_dns(None).await;
     assert!(result.is_err());
     assert!(result
@@ -45,7 +45,7 @@ async fn test_gt5s_unsupported_set_dns() {
 
 #[tokio::test]
 async fn test_gt5s_select_lte_band_not_supported() {
-    let client = crate::gt5s::Gt5sClient::new("192.168.0.1").unwrap();
+    let client = Gt5sClient::new("https://192.168.0.1").unwrap();
     let result = client.select_lte_band(None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().to_string().contains("not supported"));

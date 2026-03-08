@@ -16,7 +16,7 @@ use serde::Serialize;
 use serde_json::Value;
 
 use crate::bands::{select_lte_band, LteBand};
-use crate::{BearerPreference, ConnectionMode, RouterClient};
+use crate::{BearerPreference, ConnectionMode, RouterClient, normalize_router_url};
 
 use self::commands::{
     AdCommand, BearerPreferenceCommand, ConnectNetworkCommand, ConnectionModeCommand,
@@ -33,13 +33,9 @@ pub struct Mf289fClient {
 }
 
 impl Mf289fClient {
-    pub fn new(ip: &str) -> Result<Self> {
+    pub fn new(url: &str) -> Result<Self> {
         let client = reqwest::ClientBuilder::new().cookie_store(true).build()?;
-
-        #[cfg(any(feature = "tls-native", feature = "tls-rustls"))]
-        let target = format!("https://{}/", ip);
-        #[cfg(not(any(feature = "tls-native", feature = "tls-rustls")))]
-        let target = format!("http://{}/", ip);
+        let target = normalize_router_url(url)?;
 
         Ok(Mf289fClient { target, client })
     }

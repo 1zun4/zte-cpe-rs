@@ -34,7 +34,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::bands::LteBand;
-use crate::{BearerPreference, ConnectionMode, RouterClient};
+use crate::{BearerPreference, ConnectionMode, RouterClient, normalize_router_url};
 
 const NULL_SESSION: &str = "00000000000000000000000000000000";
 
@@ -110,7 +110,7 @@ pub struct Gt5sClient {
 }
 
 impl Gt5sClient {
-    pub fn new(ip: &str) -> Result<Self> {
+    pub fn new(url: &str) -> Result<Self> {
         #[allow(unused_mut)]
         let mut builder = reqwest::ClientBuilder::new().cookie_store(true);
 
@@ -121,8 +121,7 @@ impl Gt5sClient {
         }
 
         let client = builder.build()?;
-
-        let target = format!("https://{}/", ip);
+        let target = normalize_router_url(url)?;
 
         Ok(Gt5sClient {
             target,

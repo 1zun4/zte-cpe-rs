@@ -9,12 +9,12 @@ pub async fn run(cli: Cli) -> Result<()> {
         .model
         .or(default_model())
         .ok_or_else(|| anyhow!("--model is required when multiple router model features are compiled in"))?;
-    let mut client = build_client(model, &cli.host)?;
+    let mut client = build_client(model, &cli.url)?;
 
     client
         .login(&cli.password)
         .await
-        .with_context(|| format!("failed to login to {} at {}", model, cli.host))?;
+        .with_context(|| format!("failed to login to {} at {}", model, cli.url))?;
 
     let result = execute_command(client.as_mut(), cli.command).await;
     let logout_result = client.logout().await;
@@ -111,12 +111,12 @@ fn print_json(value: &Value, pretty: bool) -> Result<()> {
     Ok(())
 }
 
-fn build_client(model: Model, host: &str) -> Result<Box<dyn RouterClient>> {
+fn build_client(model: Model, url: &str) -> Result<Box<dyn RouterClient>> {
     match model {
         #[cfg(feature = "mf289f")]
-        Model::Mf289f => Ok(Box::new(zte_cpe_rs::mf289f::Mf289fClient::new(host)?)),
+        Model::Mf289f => Ok(Box::new(zte_cpe_rs::mf289f::Mf289fClient::new(url)?)),
         #[cfg(feature = "gt5s")]
-        Model::Gt5s => Ok(Box::new(zte_cpe_rs::gt5s::Gt5sClient::new(host)?)),
+        Model::Gt5s => Ok(Box::new(zte_cpe_rs::gt5s::Gt5sClient::new(url)?)),
     }
 }
 
