@@ -11,14 +11,25 @@ A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F
 | Feature | MF289F | GT5S |
 | --- | --- | --- |
 | Device reboot | Yes | Yes |
-| Status information / monitoring | Yes | Yes |
+| Get status info | Yes | Yes |
+| Get device info | No | Yes |
+| Get network/signal information | No | Yes |
+| Get SIM card info | No | Yes |
 | Connect and disconnect network | Yes | Yes |
 | Set connection mode | Yes | Yes |
 | Set bearer preference | Yes | Yes |
 | Set LTE band lock | Yes | No |
-| Set DNS mode configuration | Yes | No |
+| Set DNS mode | Yes | No |
 | Configure UPnP | Yes | Yes |
 | Configure DMZ | Yes | Yes |
+| Get APN profiles | No | Yes |
+| Modify an APN profile | No | Yes |
+| Get DHCP settings | No | Yes |
+| Set DHCP settings | No | Yes |
+| Get MTU/MSS settings | No | Yes |
+| Set MTU/MSS settings | No | Yes |
+| Get SMS settings | No | Yes |
+| Get connected devices | No | Yes |
 
 ## Installation
 

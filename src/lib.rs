@@ -75,6 +75,82 @@ impl Default for BearerPreference {
     }
 }
 
+// --- APN types ---
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ApnAuthMode {
+    None,
+    Pap,
+    Chap,
+    PapChap,
+}
+
+impl std::fmt::Display for ApnAuthMode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ApnAuthMode::None => write!(f, "NONE"),
+            ApnAuthMode::Pap => write!(f, "PAP"),
+            ApnAuthMode::Chap => write!(f, "CHAP"),
+            ApnAuthMode::PapChap => write!(f, "PAP_CHAP"),
+        }
+    }
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PdpType {
+    IPv4,
+    IPv6,
+    IPv4v6,
+}
+
+impl std::fmt::Display for PdpType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PdpType::IPv4 => write!(f, "IPv4"),
+            PdpType::IPv6 => write!(f, "IPv6"),
+            PdpType::IPv4v6 => write!(f, "IPv4v6"),
+        }
+    }
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct ApnProfile {
+    pub profile_id: Option<String>,
+    pub profile_name: String,
+    pub apn: String,
+    pub pdp_type: PdpType,
+    pub auth_mode: ApnAuthMode,
+    pub username: String,
+    pub password: String,
+}
+
+// --- DHCP types ---
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct DhcpSettings {
+    pub ip_address: String,
+    pub subnet_mask: String,
+    pub dhcp_enabled: bool,
+    pub lease_time: u32,
+}
+
+// --- MTU types ---
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct MtuSettings {
+    pub mtu: u32,
+    pub mss: u32,
+}
+
+// --- SMS types ---
+
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+pub struct SmsSettings {
+    pub validity: String,
+    pub center_number: String,
+    pub delivery_report: bool,
+}
+
 /// Common trait implemented by all router clients.
 ///
 /// Each router model provides its own implementation. Methods that are not
@@ -151,5 +227,75 @@ pub trait RouterClient {
 
     /// Get router status info as JSON.
     async fn get_status(&self) -> Result<Value>;
+
+    /// Get the current APN mode: true = manual, false = auto.
+    async fn get_apn_mode(&self) -> Result<bool> {
+        bail!("get_apn_mode is not supported on this model")
+    }
+
+    /// Set APN mode: true = manual, false = auto.
+    async fn set_apn_mode(&self, _manual: bool) -> Result<()> {
+        bail!("set_apn_mode is not supported on this model")
+    }
+
+    /// List manual APN profiles.
+    async fn get_apn_profiles(&self) -> Result<Vec<ApnProfile>> {
+        bail!("get_apn_profiles is not supported on this model")
+    }
+
+    /// Modify an existing manual APN profile.
+    async fn set_apn_profile(&self, _profile: &ApnProfile) -> Result<()> {
+        bail!("set_apn_profile is not supported on this model")
+    }
+
+    /// Set a manual APN profile as the active/default one.
+    async fn enable_apn_profile(&self, _profile_id: &str) -> Result<()> {
+        bail!("enable_apn_profile is not supported on this model")
+    }
+
+    /// Get current DHCP settings.
+    async fn get_dhcp_settings(&self) -> Result<DhcpSettings> {
+        bail!("get_dhcp_settings is not supported on this model")
+    }
+
+    /// Set DHCP settings.
+    async fn set_dhcp_settings(&self, _settings: &DhcpSettings) -> Result<()> {
+        bail!("set_dhcp_settings is not supported on this model")
+    }
+
+    /// Get current MTU/MSS settings.
+    async fn get_mtu_settings(&self) -> Result<MtuSettings> {
+        bail!("get_mtu_settings is not supported on this model")
+    }
+
+    /// Set MTU/MSS settings.
+    async fn set_mtu_settings(&self, _settings: &MtuSettings) -> Result<()> {
+        bail!("set_mtu_settings is not supported on this model")
+    }
+
+    /// Get SMS settings.
+    async fn get_sms_settings(&self) -> Result<SmsSettings> {
+        bail!("get_sms_settings is not supported on this model")
+    }
+
+    /// Get network/signal information.
+    async fn get_network_info(&self) -> Result<Value> {
+        bail!("get_network_info is not supported on this model")
+    }
+
+    /// Get SIM card information.
+    async fn get_sim_info(&self) -> Result<Value> {
+        bail!("get_sim_info is not supported on this model")
+    }
+
+    /// Get device information (IMEI, versions, etc).
+    async fn get_device_info(&self) -> Result<Value> {
+        bail!("get_device_info is not supported on this model")
+    }
+
+    /// Get connected device list.
+    async fn get_connected_devices(&self) -> Result<Value> {
+        bail!("get_connected_devices is not supported on this model")
+    }
 }
 

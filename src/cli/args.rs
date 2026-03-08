@@ -194,6 +194,76 @@ pub enum Command {
     SelectLteBand {
         selection: LteBandSelection,
     },
+    /// Get APN profiles
+    GetApn,
+    /// Modify an APN profile
+    SetApn {
+        /// Profile ID to modify
+        #[arg(long)]
+        id: String,
+        /// Profile name
+        #[arg(long)]
+        name: Option<String>,
+        /// APN name
+        #[arg(long)]
+        apn: Option<String>,
+        /// PDP type: ipv4, ipv6, ipv4v6
+        #[arg(long)]
+        pdp_type: Option<String>,
+        /// Auth mode: none, pap, chap, pap-chap
+        #[arg(long)]
+        auth: Option<String>,
+        /// Username
+        #[arg(long)]
+        username: Option<String>,
+        /// Password
+        #[arg(long)]
+        password: Option<String>,
+    },
+    /// Get DHCP settings
+    GetDhcp,
+    /// Set DHCP settings
+    SetDhcp {
+        #[arg(long)]
+        ip: Option<String>,
+        #[arg(long)]
+        subnet: Option<String>,
+        #[arg(long)]
+        enabled: Option<SwitchState>,
+        #[arg(long)]
+        lease_time: Option<u32>,
+    },
+    /// Get MTU/MSS settings
+    GetMtu,
+    /// Set MTU/MSS settings
+    SetMtu {
+        #[arg(long)]
+        mtu: Option<u32>,
+        #[arg(long)]
+        mss: Option<u32>,
+    },
+    /// Get SMS settings
+    GetSmsSettings,
+    /// Get network/signal information
+    NetworkInfo {
+        #[arg(long)]
+        pretty: bool,
+    },
+    /// Get SIM card info
+    SimInfo {
+        #[arg(long)]
+        pretty: bool,
+    },
+    /// Get device info (IMEI, versions, etc)
+    DeviceInfo {
+        #[arg(long)]
+        pretty: bool,
+    },
+    /// Get connected devices
+    ConnectedDevices {
+        #[arg(long)]
+        pretty: bool,
+    },
 }
 
 fn parse_lte_band(value: &str) -> Result<LteBand> {
