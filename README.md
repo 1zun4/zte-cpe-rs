@@ -33,18 +33,29 @@ A Rust library for interacting with ZTE devices, such as the GigaCube ZTE MF289F
 
 ## Installation
 
-Add this to your `Cargo.toml`:
+Install the CLI system-wide with Cargo:
+
+```sh
+cargo install zte-cpe-rs --features cli --locked
+```
+
+Or add this to your `Cargo.toml` to use the library:
 
 ```toml
 [dependencies]
-zte-cpe-rs = "0.2.1"
+zte-cpe-rs = "1.0.0"
 ```
-
-The library builds by default. The CLI is optional and is only compiled when you enable the `cli` feature.
 
 ## Usage
 
-Here's a basic example of how to use `zte-cpe-rs`:
+CLI:
+
+```sh
+zte-cpe-rs --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status
+zte-cpe-rs --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status --pretty
+```
+
+Code:
 
 ```rust
 use std::collections::HashSet;
@@ -86,22 +97,6 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-```
-
-## Setup
-
-Clone the repository:
-
-```sh
-git clone https://github.com/1zun4/zte-cpe-rs.git
-cd zte-cpe-rs
-```
-
-Use the CLI:
-
-```sh
-cargo run --features cli -- --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status
-cargo run --features cli -- --model g5ts --url https://192.168.0.1 --password YOURPASSWORD status --pretty
 ```
 
 ## Acknowledgements
